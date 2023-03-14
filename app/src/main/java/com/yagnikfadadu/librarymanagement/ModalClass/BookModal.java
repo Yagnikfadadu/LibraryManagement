@@ -2,7 +2,7 @@ package com.yagnikfadadu.librarymanagement.ModalClass;
 
 public class BookModal {
     double price;
-    int id;
+    String id;
     int quantity;
     int available;
     int totalIssues;
@@ -17,6 +17,22 @@ public class BookModal {
 
     public BookModal() {
 
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public double getPrice() {

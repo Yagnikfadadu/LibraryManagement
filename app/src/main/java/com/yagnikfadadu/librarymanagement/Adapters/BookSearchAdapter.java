@@ -1,6 +1,7 @@
 package com.yagnikfadadu.librarymanagement.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.yagnikfadadu.librarymanagement.BookActivity;
 import com.yagnikfadadu.librarymanagement.ModalClass.BookModal;
 import com.yagnikfadadu.librarymanagement.R;
 
@@ -59,6 +61,9 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        holder.bookImage.setImageBitmap(bmp);
+
         int bookRating = (int) bookModal.getRating();
         Log.d("books",""+bookRating);
         switch (bookRating){
@@ -81,8 +86,6 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
                 holder.ratingImage.setImageResource(R.drawable.five_star);
                 break;
         }
-
-        holder.bookImage.setImageBitmap(bmp);
     }
 
     @Override
@@ -104,11 +107,19 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
             author = itemView.findViewById(R.id.list_book_author);
             title = itemView.findViewById(R.id.list_book_title);
 
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            int position = this.getAdapterPosition();
+            Intent intent = new Intent(context, BookActivity.class);
+            intent.putExtra("id",bookModalList.get(position).getId());
+            intent.putExtra("url",bookModalList.get(position).getCoverPhoto());
+            intent.putExtra("name",bookModalList.get(position).getName());
+            intent.putExtra("rating",bookModalList.get(position).getRating());
+            intent.putExtra("author",bookModalList.get(position).getAuthor());
+            context.startActivity(intent);
         }
     }
 }

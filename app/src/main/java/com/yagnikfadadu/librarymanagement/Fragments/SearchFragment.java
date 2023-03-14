@@ -1,6 +1,5 @@
 package com.yagnikfadadu.librarymanagement.Fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +19,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.yagnikfadadu.librarymanagement.Adapters.BookSearchAdapter;
 import com.yagnikfadadu.librarymanagement.ModalClass.BookModal;
 import com.yagnikfadadu.librarymanagement.R;
@@ -72,6 +72,19 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                     Log.d("myDebug",searchEditText.getText().toString());
+                    if (!searchEditText.getText().toString().isEmpty()){
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                searchWithParams(searchEditText.getText().toString().toLowerCase());
+                            }
+                        }.start();
+                    }
 
             }
 
@@ -85,7 +98,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -103,6 +116,7 @@ public class SearchFragment extends Fragment {
             Document document = cursor.next();
             BookModal bookModal = new BookModal();
 
+            bookModal.setId(document.getString("_id"));
             bookModal.setAuthor(document.getString("author"));
             bookModal.setCoverPhoto(document.getString("url"));
             bookModal.setName(document.getString("name"));
@@ -119,13 +133,73 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    private class MyTask extends AsyncTask<String,Void,String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            initializeBookList();
-            return null;
+    public void searchWithParams(String param){
+        MongoCursor<Document> cursor = collection.find(Filters.regex("name",".*"+param+".*","i")).iterator();
+        MongoCursor<Document> cursor1 = collection.find(Filters.regex("author",".*"+param+".*","i")).iterator();
+
+        if (!cursor.hasNext() && !cursor1.hasNext()){
+            Log.d("myDebug","Param:"+param);
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bookModalArrayList.clear();
+                    bookSearchAdapter.notifyDataSetChanged();
+                }
+            });
+            return;
         }
+
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bookModalArrayList.clear();
+                bookSearchAdapter.notifyDataSetChanged();
+            }
+        });
+
+        while (cursor.hasNext()) {
+
+            Document document = cursor.next();
+            BookModal bookModal = new BookModal();
+
+            bookModal.setId(document.getString("_id"));
+            bookModal.setAuthor(document.getString("author"));
+            bookModal.setCoverPhoto(document.getString("url"));
+            bookModal.setName(document.getString("name"));
+            bookModal.setRating(document.getDouble("rating"));
+
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    linearProgressIndicator.setVisibility(View.GONE);
+                    bookModalArrayList.add(bookModal);
+                    bookSearchAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(bookSearchAdapter);
+                }
+            });
+        }
+
+        while (cursor1.hasNext()) {
+
+            Document document = cursor1.next();
+            BookModal bookModal = new BookModal();
+
+            bookModal.setId(document.getString("_id"));
+            bookModal.setAuthor(document.getString("author"));
+            bookModal.setCoverPhoto(document.getString("url"));
+            bookModal.setName(document.getString("name"));
+            bookModal.setRating(document.getDouble("rating"));
+
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    linearProgressIndicator.setVisibility(View.GONE);
+                    bookModalArrayList.add(bookModal);
+                    bookSearchAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(bookSearchAdapter);
+                }
+            });
+        }
+
     }
-
-
 }

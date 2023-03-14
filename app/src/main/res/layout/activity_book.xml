@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:clipChildren="false"
+    tools:context=".BookActivity">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:weightSum="10"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/book_image"
+            android:elevation="5dp"
+            android:background="@color/white"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:layout_width="215dp"
+            android:layout_height="300dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/book_name"
+                android:layout_marginHorizontal="20dp"
+                android:maxLines="2"
+                android:gravity="center"
+                android:textSize="21sp"
+                android:text="Engineering Design | 6th Edition"
+                android:fontFamily="@font/exo_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/book_author"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#919191"
+                android:text="Gupta S. P."
+                android:fontFamily="@font/exo_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>
