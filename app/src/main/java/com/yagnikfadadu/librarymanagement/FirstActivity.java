@@ -29,6 +29,13 @@ public class FirstActivity extends AppCompatActivity {
     MaterialButton loginButton;
     MaterialButton createAccountButton;
 
+    String connectionString = "mongodb://library:library@ac-tkj0cxa-shard-00-00.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-01.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-02.iwyetkb.mongodb.net:27017/?ssl=true&replicaSet=atlas-4hjcpc-shard-0&authSource=admin&retryWrites=true&w=majority";
+    MongoClientURI uri = new MongoClientURI(connectionString);
+    MongoClient mongoClient = new MongoClient(uri);
+
+    MongoDatabase database = mongoClient.getDatabase("users");
+    MongoCollection<Document> collection = database.getCollection("users");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,11 +170,7 @@ public class FirstActivity extends AppCompatActivity {
 
     String fetchUserWithParameter(String enrollmentNumber, String param){
         try {
-            String connectionString = "mongodb://library:library_admin@ac-bzixxjg-shard-00-00.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-01.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-02.56pdawn.mongodb.net:27017/?ssl=true&replicaSet=atlas-tyk0hf-shard-0&authSource=admin&retryWrites=true&w=majority";
-            MongoClientURI uri = new MongoClientURI(connectionString);
-            MongoClient mongoClient = new MongoClient(uri);
-            MongoDatabase database = mongoClient.getDatabase("users");
-            MongoCollection<Document> collection = database.getCollection("users");
+
             Document doc = collection.find(Filters.eq("_id", enrollmentNumber)).first();
 
             String value;

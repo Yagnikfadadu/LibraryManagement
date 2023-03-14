@@ -62,6 +62,10 @@ public class SearchFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(bookSearchAdapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -120,6 +124,7 @@ public class SearchFragment extends Fragment {
             bookModal.setAuthor(document.getString("author"));
             bookModal.setCoverPhoto(document.getString("url"));
             bookModal.setName(document.getString("name"));
+            bookModal.setTotalRatedUser(document.getInteger("totalrateduser"));
             bookModal.setRating(document.getDouble("rating"));
 
             requireActivity().runOnUiThread(new Runnable() {
@@ -166,6 +171,7 @@ public class SearchFragment extends Fragment {
             bookModal.setAuthor(document.getString("author"));
             bookModal.setCoverPhoto(document.getString("url"));
             bookModal.setName(document.getString("name"));
+            bookModal.setTotalRatedUser(document.getInteger("totalrateduser"));
             bookModal.setRating(document.getDouble("rating"));
 
             requireActivity().runOnUiThread(new Runnable() {
@@ -188,6 +194,7 @@ public class SearchFragment extends Fragment {
             bookModal.setAuthor(document.getString("author"));
             bookModal.setCoverPhoto(document.getString("url"));
             bookModal.setName(document.getString("name"));
+            bookModal.setTotalRatedUser(document.getInteger("totalrateduser"));
             bookModal.setRating(document.getDouble("rating"));
 
             requireActivity().runOnUiThread(new Runnable() {

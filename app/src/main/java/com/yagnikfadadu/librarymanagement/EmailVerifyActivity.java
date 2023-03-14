@@ -42,10 +42,14 @@ public class EmailVerifyActivity extends AppCompatActivity {
     EditText e4;
     EditText e5;
     EditText e6;
+
     TextView emailTextView;
     TextView statusTextView;
+
     MaterialButton verifyButton;
+
     ImageView statusImage;
+
     String OTP;
     String nameString;
     String emailString;
@@ -54,6 +58,11 @@ public class EmailVerifyActivity extends AppCompatActivity {
     String spIDString;
     String branchString;
     String password;
+
+    String connectionString = "mongodb://library:library@ac-tkj0cxa-shard-00-00.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-01.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-02.iwyetkb.mongodb.net:27017/?ssl=true&replicaSet=atlas-4hjcpc-shard-0&authSource=admin&retryWrites=true&w=majority";
+    MongoClientURI uri = new MongoClientURI(connectionString);
+    MongoClient mongoClient = new MongoClient(uri);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,9 +210,6 @@ public class EmailVerifyActivity extends AppCompatActivity {
 
     boolean insertUser(UserModal userModal){
         try {
-            String connectionString = "mongodb://library:library_admin@ac-bzixxjg-shard-00-00.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-01.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-02.56pdawn.mongodb.net:27017/?ssl=true&replicaSet=atlas-tyk0hf-shard-0&authSource=admin&retryWrites=true&w=majority";
-            MongoClientURI uri = new MongoClientURI(connectionString);
-            MongoClient mongoClient = new MongoClient(uri);
             MongoDatabase database = mongoClient.getDatabase("users");
             MongoCollection<Document> collection = database.getCollection("users");
 

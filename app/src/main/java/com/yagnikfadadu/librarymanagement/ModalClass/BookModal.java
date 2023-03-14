@@ -2,12 +2,12 @@ package com.yagnikfadadu.librarymanagement.ModalClass;
 
 public class BookModal {
     double price;
+    double rating;
     String id;
     int quantity;
     int available;
     int totalIssues;
     int totalRatedUser;
-    double rating;
     String name;
     String field;
     String author;

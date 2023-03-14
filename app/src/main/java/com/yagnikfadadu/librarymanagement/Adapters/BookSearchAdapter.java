@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +49,6 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
                 edit+= sub[i]+" ";
             }
             edit += "\n"+sub[sub.length-1];
-            Log.d("books",edit);
             holder.title.setText(edit);
         }
         holder.author.setText(bookModal.getAuthor());
@@ -64,8 +62,12 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
 
         holder.bookImage.setImageBitmap(bmp);
 
-        int bookRating = (int) bookModal.getRating();
-        Log.d("books",""+bookRating);
+        int bookRating;
+        if ((int)bookModal.getTotalRatedUser()>0) {
+            bookRating = (int) (bookModal.getRating() / bookModal.getTotalRatedUser());
+        }else {
+            bookRating = 0;
+        }
         switch (bookRating){
             case 0:
                 holder.ratingImage.setImageResource(R.drawable.zero_star);
@@ -119,6 +121,7 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Vi
             intent.putExtra("name",bookModalList.get(position).getName());
             intent.putExtra("rating",bookModalList.get(position).getRating());
             intent.putExtra("author",bookModalList.get(position).getAuthor());
+
             context.startActivity(intent);
         }
     }

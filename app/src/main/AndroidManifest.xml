@@ -16,6 +16,7 @@
         android:theme="@style/Theme.LibraryManagement"
         tools:targetApi="31">
         <activity
+            android:parentActivityName=".MainActivity"
             android:name=".BookActivity"
             android:exported="false" />
         <activity
@@ -27,6 +28,7 @@
         <activity
             android:name=".EmailVerifyActivity"
             android:exported="false" />
+
         <activity
             android:name=".FirstActivity"
             android:exported="true">
@@ -36,6 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".CustomOrientationScanner"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

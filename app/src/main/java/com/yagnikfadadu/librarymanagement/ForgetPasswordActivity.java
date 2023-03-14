@@ -46,6 +46,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     String emailString;
     String enrollString;
 
+    String connectionString = "mongodb://library:library@ac-tkj0cxa-shard-00-00.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-01.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-02.iwyetkb.mongodb.net:27017/?ssl=true&replicaSet=atlas-4hjcpc-shard-0&authSource=admin&retryWrites=true&w=majority";
+    MongoClientURI uri = new MongoClientURI(connectionString);
+    MongoClient mongoClient = new MongoClient(uri);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,9 +150,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     boolean updatePassword(String enroll,String password){
-        String connectionString = "mongodb://library:library_admin@ac-bzixxjg-shard-00-00.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-01.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-02.56pdawn.mongodb.net:27017/?ssl=true&replicaSet=atlas-tyk0hf-shard-0&authSource=admin&retryWrites=true&w=majority";
-        MongoClientURI uri = new MongoClientURI(connectionString);
-        MongoClient mongoClient = new MongoClient(uri);
         MongoDatabase database = mongoClient.getDatabase("users");
         MongoCollection<Document> collection = database.getCollection("users");
 
@@ -166,9 +167,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     String fetchUserWithParameter(String enrollmentNumber, String param){
         try {
-            String connectionString = "mongodb://library:library_admin@ac-bzixxjg-shard-00-00.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-01.56pdawn.mongodb.net:27017,ac-bzixxjg-shard-00-02.56pdawn.mongodb.net:27017/?ssl=true&replicaSet=atlas-tyk0hf-shard-0&authSource=admin&retryWrites=true&w=majority";
-            MongoClientURI uri = new MongoClientURI(connectionString);
-            MongoClient mongoClient = new MongoClient(uri);
             MongoDatabase database = mongoClient.getDatabase("users");
             MongoCollection<Document> collection = database.getCollection("users");
             Document doc = collection.find(Filters.eq("_id", enrollmentNumber)).first();
@@ -187,9 +185,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     boolean compareOTP(String email,String otp){
+
         String connectionString = "mongodb://library:library_otp@ac-mskny2c-shard-00-00.mj5rfnf.mongodb.net:27017,ac-mskny2c-shard-00-01.mj5rfnf.mongodb.net:27017,ac-mskny2c-shard-00-02.mj5rfnf.mongodb.net:27017/?ssl=true&replicaSet=atlas-pfqm0g-shard-0&authSource=admin&retryWrites=true&w=majority";
         MongoClientURI uri = new MongoClientURI(connectionString);
         MongoClient mongoClient = new MongoClient(uri);
+
         MongoDatabase database = mongoClient.getDatabase("otp");
         MongoCollection<Document> collection = database.getCollection("otp");
 
