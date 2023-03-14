@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".Fragments.SearchFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/primaryColor"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_edit_text"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Search Books"
+            android:paddingTop="10dp"
+            android:paddingStart="15dp"
+            android:paddingBottom="10dp"
+            android:textColorHint="#8E8E8E"
+            android:drawableTint="@color/primaryColor"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:drawablePadding="8dp"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/circular"
+            android:cursorVisible="false"
+            android:drawableLeft="@drawable/ic_baseline_search_24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linear_progress_bar"
+            app:trackCornerRadius="4dp"
+            android:layout_marginHorizontal="10dp"
+            android:indeterminate="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="3dp"
+            android:minHeight="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_recycler_view"
+        tools:listitem="@layout/book_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

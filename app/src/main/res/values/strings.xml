@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Library Management</string>
+    <string name="welcome_msg">Welcome to \nLibrary Management System</string>
+    <string name="welcome_slogan">Manage Library Records effortlessly!</string>
+    <string name="welcome_login">Login</string>
+    <string name="welcome_sign_up">Create Account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

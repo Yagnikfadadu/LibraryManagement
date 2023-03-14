@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".FirstActivity">
+
+    <ImageView
+        android:id="@+id/first_imageView"
+        android:src="@raw/first_image"
+        android:contentDescription="Image View"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="-32dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"/>
+
+    <TextView
+        android:id="@+id/first_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_imageView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="25dp"
+        android:fontFamily="@font/exo_bold"
+        android:gravity="center"
+        android:text="@string/welcome_msg"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/first_sub_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_message"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/welcome_slogan"
+        android:textColor="#636D77" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_sub_message"
+        android:layout_marginHorizontal="85dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/exo_bold"
+        android:gravity="center"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="9dp"
+        android:text="Login"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:cornerRadius="12dp" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_create_account"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_login"
+        android:layout_marginHorizontal="85dp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/exo_bold"
+        android:gravity="center"
+        app:strokeColor="@color/primaryColor"
+        android:paddingVertical="9dp"
+        android:paddingHorizontal="5dp"
+        android:text="@string/welcome_sign_up"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:cornerRadius="12dp" />
+
+</RelativeLayout>
