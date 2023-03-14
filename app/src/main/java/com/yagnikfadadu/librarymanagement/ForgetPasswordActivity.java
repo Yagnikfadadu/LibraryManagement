@@ -28,7 +28,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -156,7 +155,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         try {
             Bson filter = Filters.eq("_id",enrollString);
             Bson update = Updates.set("password", password);
-            UpdateResult result = collection.updateOne(filter, update);
+            collection.updateOne(filter, update);
 
             return true;
         }catch (Exception e){

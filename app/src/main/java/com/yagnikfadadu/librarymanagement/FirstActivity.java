@@ -170,7 +170,6 @@ public class FirstActivity extends AppCompatActivity {
 
     String fetchUserWithParameter(String enrollmentNumber, String param){
         try {
-
             Document doc = collection.find(Filters.eq("_id", enrollmentNumber)).first();
 
             String value;

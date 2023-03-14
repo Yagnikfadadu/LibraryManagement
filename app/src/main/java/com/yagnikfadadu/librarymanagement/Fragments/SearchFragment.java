@@ -1,5 +1,10 @@
 package com.yagnikfadadu.librarymanagement.Fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,39 +12,58 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.yagnikfadadu.librarymanagement.Adapters.BookSearchAdapter;
+import com.yagnikfadadu.librarymanagement.CustomOrientationScanner;
 import com.yagnikfadadu.librarymanagement.ModalClass.BookModal;
 import com.yagnikfadadu.librarymanagement.R;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
 
     RecyclerView recyclerView;
     BookSearchAdapter bookSearchAdapter;
+    ImageView scanQR;
     ArrayList<BookModal> bookModalArrayList;
     TextInputEditText searchEditText;
     LinearProgressIndicator linearProgressIndicator;
     String connectionString = "mongodb://library:library@ac-tkj0cxa-shard-00-00.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-01.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-02.iwyetkb.mongodb.net:27017/?ssl=true&replicaSet=atlas-4hjcpc-shard-0&authSource=admin&retryWrites=true&w=majority";
     MongoClientURI uri = new MongoClientURI(connectionString);
     MongoClient mongoClient = new MongoClient(uri);
-    MongoDatabase database = mongoClient.getDatabase("books");
-    MongoCollection<Document> collection = database.getCollection("books");
+
+    MongoDatabase bookDatabase = mongoClient.getDatabase("books");
+    MongoCollection<Document> booksCollection = bookDatabase.getCollection("books");
+
+    MongoDatabase recordDatabase = mongoClient.getDatabase("records");
+    MongoCollection<Document> recordCollection = recordDatabase.getCollection("records");
+
+    MongoDatabase database = mongoClient.getDatabase("users");
+    MongoCollection<Document> collection = database.getCollection("users");
 
     public SearchFragment(){
     }
@@ -59,6 +83,7 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.search_recycler_view);
         searchEditText = view.findViewById(R.id.search_edit_text);
         linearProgressIndicator = view.findViewById(R.id.linear_progress_bar);
+        scanQR = view.findViewById(R.id.scan_image);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(bookSearchAdapter);
@@ -98,6 +123,18 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        scanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator integrator = IntentIntegrator.forSupportFragment(SearchFragment.this);
+                integrator.setPrompt("Scan QR code");
+                integrator.setBeepEnabled(true);
+                integrator.setCaptureActivity(CustomOrientationScanner.class);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                integrator.initiateScan();
+            }
+        });
+
         new Thread(){
             @Override
             public void run() {
@@ -114,7 +151,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void initializeBookList(){
-        MongoCursor<Document> cursor = collection.find().iterator();
+        MongoCursor<Document> cursor = booksCollection.find().iterator();
         while (cursor.hasNext()) {
 
             Document document = cursor.next();
@@ -139,8 +176,8 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchWithParams(String param){
-        MongoCursor<Document> cursor = collection.find(Filters.regex("name",".*"+param+".*","i")).iterator();
-        MongoCursor<Document> cursor1 = collection.find(Filters.regex("author",".*"+param+".*","i")).iterator();
+        MongoCursor<Document> cursor = booksCollection.find(Filters.regex("name",".*"+param+".*","i")).iterator();
+        MongoCursor<Document> cursor1 = booksCollection.find(Filters.regex("author",".*"+param+".*","i")).iterator();
 
         if (!cursor.hasNext() && !cursor1.hasNext()){
             Log.d("myDebug","Param:"+param);
@@ -209,4 +246,94 @@ public class SearchFragment extends Fragment {
         }
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if (intentResult != null) {
+            if (intentResult.getContents() == null) {
+                Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    if (generateTransaction(intentResult.getContents())){
+                        Toast.makeText(requireContext(), "Book Issued Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e){
+                    Log.d("Exception",""+e);
+                }
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean generateTransaction(String bookID){
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared",MODE_PRIVATE);
+        String enroll = sharedPreferences.getString("enroll","");
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate dateAfter15Days = currentDate.plusDays(15);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String expected = dateAfter15Days.format(formatter);
+        String issued = currentDate.format(formatter);
+
+        if (enroll.isEmpty()){
+            Toast.makeText(requireContext(), "Please Login Again", Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            try {
+                Document book = booksCollection.find(Filters.eq("_id", bookID)).first();
+                Document user = collection.find(Filters.eq("_id", enroll)).first();
+
+                if (book==null || user==null){
+                    Toast.makeText(requireContext(), "Invalid QR", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                int bookCount = book.getInteger("available");
+                int totalIssues = book.getInteger("totalissues");
+                int userCredits = user.getInteger("credit");
+
+
+                if (userCredits<=0){
+                    Toast.makeText(requireContext(), "Insufficient Credits", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (bookCount<=0){
+                    Toast.makeText(requireContext(), "Book Unavailable", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                Document document = new Document("_id",""+System.currentTimeMillis())
+                        .append("bookID",bookID)
+                        .append("enroll",enroll)
+                        .append("name",book.getString("name"))
+                        .append("author",book.getString("author"))
+                        .append("url",book.getString("url"))
+                        .append("issueDate",issued)
+                        .append("expectedReturnDate",expected);
+
+                recordCollection.insertOne(document);
+
+                Bson filter = Filters.eq("_id",bookID);
+                Bson update = Updates.set("available",bookCount-1);
+                Bson update1 = Updates.set("totalissues",totalIssues+1);
+                booksCollection.updateOne(filter, update);
+                booksCollection.updateOne(filter,update1);
+
+                Bson filter2 = Filters.eq("_id",enroll);
+                Bson update3 = Updates.set("credit",userCredits-1);
+                collection.updateOne(filter2,update3);
+
+                return true;
+            }catch (Exception e){
+                Log.d("myDebug", "generateTransaction: "+e);
+                return false;
+            }
+        }
+    }
+
 }

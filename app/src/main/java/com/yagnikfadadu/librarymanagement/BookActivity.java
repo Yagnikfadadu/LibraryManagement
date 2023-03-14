@@ -7,13 +7,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
@@ -24,12 +27,16 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.yagnikfadadu.librarymanagement.ModalClass.BookModal;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -136,7 +143,7 @@ public class BookActivity extends AppCompatActivity {
     }
 
     public void getBookDetails(String id){
-        Document doc = collection.find(Filters.eq("_id", id)).first();
+        Document doc = booksCollection.find(Filters.eq("_id", id)).first();
         if (doc!=null){
 
             runOnUiThread(new Runnable() {
@@ -212,6 +219,7 @@ public class BookActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -222,28 +230,87 @@ public class BookActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
                 try {
-                    Toast.makeText(this, ""+intentResult.getContents(), Toast.LENGTH_SHORT).show();
+                    if(intentResult.getContents().equals(bookModal.getId())) {
+                        generateTransaction(intentResult.getContents());
+                        Toast.makeText(this, "Book Issued Successfully", Toast.LENGTH_SHORT).show();
+                        getBookDetails(bookModal.getId());
+                    }else {
+                        Toast.makeText(this, "Book QR doesn't Match", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Toast.makeText(this, "Please scan valid QR Code", Toast.LENGTH_SHORT).show();
                 }
-
             }
         } else {
+            Toast.makeText(this, "Please scan valid QR Code", Toast.LENGTH_SHORT).show();
             super.onActivityResult(requestCode, resultCode, data);
         }
 
     }
 
-    public void generateTransaction(String bookID){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean generateTransaction(String bookID){
         SharedPreferences sharedPreferences = getSharedPreferences("shared",MODE_PRIVATE);
         String enroll = sharedPreferences.getString("enroll","");
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate dateAfter15Days = currentDate.plusDays(15);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String expected = dateAfter15Days.format(formatter);
+        String issued = currentDate.format(formatter);
+
         if (enroll.isEmpty()){
             Toast.makeText(this, "Please Login Again", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }else {
+            try {
+                Document book = booksCollection.find(Filters.eq("_id", bookID)).first();
+                Document user = collection.find(Filters.eq("_id", enroll)).first();
 
+                if (book==null || user==null){
+                    Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                int bookCount = book.getInteger("available");
+                int totalIssues = book.getInteger("totalissues");
+                int userCredits = user.getInteger("credit");
+
+
+                if (userCredits<=0){
+                    Toast.makeText(this, "Insufficient Credits", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if (bookCount<=0){
+                    Toast.makeText(this, "Book Unavailable", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                Document document = new Document("_id",""+System.currentTimeMillis())
+                        .append("bookID",bookID)
+                        .append("enroll",enroll)
+                        .append("name",book.getString("name"))
+                        .append("author",book.getString("author"))
+                        .append("url",book.getString("url"))
+                        .append("issueDate",issued)
+                        .append("expectedReturnDate",expected);
+
+                recordCollection.insertOne(document);
+
+                Bson filter = Filters.eq("_id",bookID);
+                Bson update = Updates.set("available",bookCount-1);
+                Bson update1 = Updates.set("totalissues",totalIssues+1);
+                booksCollection.updateOne(filter, update);
+                booksCollection.updateOne(filter,update1);
+
+                Bson filter2 = Filters.eq("_id",enroll);
+                Bson update3 = Updates.set("credit",userCredits-1);
+                collection.updateOne(filter2,update3);
+
+                return true;
+            }catch (Exception e){
+                Log.d("myDebug", "generateTransaction: "+e);
+                return false;
+            }
         }
     }
 
