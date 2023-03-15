@@ -27,11 +27,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -82,6 +84,11 @@ public class BookActivity extends AppCompatActivity {
     MongoDatabase database = mongoClient.getDatabase("users");
     MongoCollection<Document> collection = database.getCollection("users");
 
+    MongoDatabase wishlistDatabase = mongoClient.getDatabase("wishlists");
+
+    MongoCollection<Document> wishlistCollection = wishlistDatabase.getCollection("wishlists");
+
+
     BookModal bookModal = new BookModal();
 
     @Override
@@ -90,6 +97,9 @@ public class BookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book);
 
         Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3867D6")));
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared",MODE_PRIVATE);
+        String enroll = sharedPreferences.getString("enroll","");
 
         bookImage = findViewById(R.id.book_image);
         name = findViewById(R.id.book_name);
@@ -146,6 +156,24 @@ public class BookActivity extends AppCompatActivity {
                 intentIntegrator.setCaptureActivity(CustomOrientationScanner.class);
                 intentIntegrator.initiateScan();
                 intentIntegrator.setRequestCode(1);
+            }
+        });
+
+        wishlistButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                MongoCursor<Document> cursor = wishlistCollection.find().iterator();
+                while (cursor.hasNext()){
+                    Document document = cursor.next();
+                    String uEnroll = document.getString("enrollment");
+                    String bookID = document.getString("bookID");
+                    if (enroll.equals(uEnroll) && bookID.equals(bookModal.getId())){
+                        Snackbar.make(wishlistButton,"Book is Already in your wishlist",Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                insertWishlists(wishlistCollection);
+                Snackbar.make(wishlistButton,"Book added to your wishlist",Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -351,6 +379,20 @@ public class BookActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void insertWishlists(MongoCollection<Document> wishlistCollection) {
+        Document wishlistDocument;
+        SharedPreferences sharedPreferences = getSharedPreferences("shared",MODE_PRIVATE);
+        String enrollment = sharedPreferences.getString("enroll","");
+
+        wishlistDocument = new Document("_id",""+System.currentTimeMillis());
+        wishlistDocument.append("bookID",bookModal.getId());
+        wishlistDocument.append("book_name", bookModal.getName());
+        wishlistDocument.append("author", bookModal.getAuthor());
+        wishlistDocument.append("url",urlString);
+        wishlistDocument.append("enrollment",enrollment);
+        wishlistCollection.insertOne(wishlistDocument);
     }
 
 }

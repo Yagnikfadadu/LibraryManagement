@@ -19,12 +19,6 @@
         android:iconTint="@color/white"
         android:title="My Books"/>
     <item
-        android:id="@+id/history"
-        android:enabled="true"
-        android:icon="@drawable/ic_history_svgrepo_com"
-        android:iconTint="@color/white"
-        android:title="History"/>
-    <item
         android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/ic_user_2_svgrepo_com"
