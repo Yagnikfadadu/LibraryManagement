@@ -135,7 +135,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 IntentIntegrator integrator = IntentIntegrator.forSupportFragment(SearchFragment.this);
-                integrator.setPrompt("Scan QR code");
+                integrator.setPrompt("Scan Book QR code\n\n");
                 integrator.setBeepEnabled(true);
                 integrator.setCaptureActivity(CustomOrientationScanner.class);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);

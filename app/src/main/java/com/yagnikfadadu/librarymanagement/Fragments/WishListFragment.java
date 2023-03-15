@@ -2,14 +2,11 @@ package com.yagnikfadadu.librarymanagement.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,12 +28,10 @@ import java.util.ArrayList;
 
 
 public class WishListFragment extends Fragment {
-    Context context;
     RecyclerView recyclerView;
     WishlistAdapter wishlistAdapter;
     ArrayList<WishlistModal> wishListArrayList;
-    ImageView coverPhoto;
-    TextView bookName, authorName, issueDate, returnDate;
+
     String connectionString = "mongodb://library:library@ac-tkj0cxa-shard-00-00.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-01.iwyetkb.mongodb.net:27017,ac-tkj0cxa-shard-00-02.iwyetkb.mongodb.net:27017/?ssl=true&replicaSet=atlas-4hjcpc-shard-0&authSource=admin&retryWrites=true&w=majority";
     MongoClientURI uri = new MongoClientURI(connectionString);
     MongoClient mongoClient = new MongoClient(uri);
@@ -68,7 +63,17 @@ public class WishListFragment extends Fragment {
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        getMyWishlist();
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+               getMyWishlist();
+            }
+        }.start();
 
         recyclerView.setAdapter(wishlistAdapter);
         return view;
@@ -93,8 +98,15 @@ public class WishListFragment extends Fragment {
                 int i = document1.getInteger("available");
                 wishlistModal.setAvailable(i);
             }
-            wishListArrayList.add(wishlistModal);
-            wishlistAdapter.notifyDataSetChanged();
+
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    wishListArrayList.add(wishlistModal);
+                    wishlistAdapter.notifyDataSetChanged();
+                }
+            });
+
         }
 
     }

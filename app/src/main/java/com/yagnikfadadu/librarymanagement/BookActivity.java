@@ -121,7 +121,10 @@ public class BookActivity extends AppCompatActivity {
         authorString = intent.getStringExtra("author");
         idString = intent.getStringExtra("id");
 
+
         getSupportActionBar().setTitle(nameString);
+
+
 
         Bitmap bmp = null;
         try {
@@ -139,7 +142,7 @@ public class BookActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -151,7 +154,7 @@ public class BookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 IntentIntegrator intentIntegrator = new IntentIntegrator(BookActivity.this);
-                intentIntegrator.setPrompt("Scan a barcode or QR Code\n\n");
+                intentIntegrator.setPrompt("Scan Book QR code\n\n");
                 intentIntegrator.setBeepEnabled(true);
                 intentIntegrator.setCaptureActivity(CustomOrientationScanner.class);
                 intentIntegrator.initiateScan();
@@ -213,6 +216,7 @@ public class BookActivity extends AppCompatActivity {
                     }
 
                     available.setText("Available: " + availableInt + "/" + totalInt);
+                    Log.d("Book", "run: "+availableInt);
 
                     if (bookModal.getAvailable()<=0){
                         issueButton.setText("Unavailable");
@@ -252,7 +256,6 @@ public class BookActivity extends AppCompatActivity {
 
                 }
             });
-
         }
     }
 
@@ -387,9 +390,9 @@ public class BookActivity extends AppCompatActivity {
         String enrollment = sharedPreferences.getString("enroll","");
 
         wishlistDocument = new Document("_id",""+System.currentTimeMillis());
-        wishlistDocument.append("bookID",bookModal.getId());
-        wishlistDocument.append("book_name", bookModal.getName());
-        wishlistDocument.append("author", bookModal.getAuthor());
+        wishlistDocument.append("bookID",idString);
+        wishlistDocument.append("book_name", nameString);
+        wishlistDocument.append("author", authorString);
         wishlistDocument.append("url",urlString);
         wishlistDocument.append("enrollment",enrollment);
         wishlistCollection.insertOne(wishlistDocument);
