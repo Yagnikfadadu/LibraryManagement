@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -88,7 +89,7 @@ public class BookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3867D6")));
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3867D6")));
 
         bookImage = findViewById(R.id.book_image);
         name = findViewById(R.id.book_name);
@@ -193,7 +194,7 @@ public class BookActivity extends AppCompatActivity {
 
                     int bookRating;
 
-                    if ((int)bookModal.getTotalRatedUser()>0) {
+                    if (bookModal.getTotalRatedUser() >0) {
                         bookRating = (int) (bookModal.getRating() / bookModal.getTotalRatedUser());
                     }else {
                         bookRating = 0;
@@ -303,6 +304,7 @@ public class BookActivity extends AppCompatActivity {
                         .append("author",book.getString("author"))
                         .append("url",book.getString("url"))
                         .append("issueDate",issued)
+                        .append("returnDate","")
                         .append("expectedReturnDate",expected);
 
                 recordCollection.insertOne(document);

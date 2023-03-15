@@ -14,6 +14,8 @@ import com.yagnikfadadu.librarymanagement.Fragments.ProfileFragment;
 import com.yagnikfadadu.librarymanagement.Fragments.SearchFragment;
 import com.yagnikfadadu.librarymanagement.Fragments.WishListFragment;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);

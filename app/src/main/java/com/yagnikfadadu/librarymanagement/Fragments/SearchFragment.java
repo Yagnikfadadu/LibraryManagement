@@ -225,7 +225,6 @@ public class SearchFragment extends Fragment {
                     linearProgressIndicator.setVisibility(View.GONE);
                     bookModalArrayList.add(bookModal);
                     bookSearchAdapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(bookSearchAdapter);
                 }
             });
         }
@@ -324,6 +323,7 @@ public class SearchFragment extends Fragment {
                         .append("author",book.getString("author"))
                         .append("url",book.getString("url"))
                         .append("issueDate",issued)
+                        .append("returnDate","")
                         .append("expectedReturnDate",expected);
 
                 recordCollection.insertOne(document);
