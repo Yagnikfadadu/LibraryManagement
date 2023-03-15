@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.yagnikfadadu.librarymanagement.Fragments.MyBooksFragment;
-import com.yagnikfadadu.librarymanagement.Fragments.NotificationsFragment;
+import com.yagnikfadadu.librarymanagement.Fragments.HistoryFragment;
 import com.yagnikfadadu.librarymanagement.Fragments.ProfileFragment;
 import com.yagnikfadadu.librarymanagement.Fragments.SearchFragment;
 import com.yagnikfadadu.librarymanagement.Fragments.WishListFragment;
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     WishListFragment wishListFragment = new WishListFragment();
     MyBooksFragment myBooksFragment = new MyBooksFragment();
     ProfileFragment profileFragment = new ProfileFragment();
-    NotificationsFragment notificationsFragment = new NotificationsFragment();
+    HistoryFragment historyFragment = new HistoryFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.mybooks:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container,myBooksFragment).commit();
                 return true;
-            case R.id.notifications:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,notificationsFragment).commit();
+            case R.id.history:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,historyFragment).commit();
                 return true;
         }
         return false;

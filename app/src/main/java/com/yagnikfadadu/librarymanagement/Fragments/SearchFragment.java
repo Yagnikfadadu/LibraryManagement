@@ -21,6 +21,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -39,6 +46,7 @@ import com.yagnikfadadu.librarymanagement.R;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -253,7 +261,6 @@ public class SearchFragment extends Fragment {
 
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     if (generateTransaction(intentResult.getContents())){
@@ -307,7 +314,10 @@ public class SearchFragment extends Fragment {
                     Toast.makeText(requireContext(), "Book Unavailable", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                Document document = new Document("_id",""+System.currentTimeMillis())
+
+                String recordID = ""+System.currentTimeMillis();
+
+                Document document = new Document("_id",recordID)
                         .append("bookID",bookID)
                         .append("enroll",enroll)
                         .append("name",book.getString("name"))
@@ -328,12 +338,38 @@ public class SearchFragment extends Fragment {
                 Bson update3 = Updates.set("credit",userCredits-1);
                 collection.updateOne(filter2,update3);
 
+                String email = user.getString("email");
+                String bookName = book.getString("name");
+
+                String url = "https://librarymanagement.yagnikpatel.repl.co/?email="+email+"&record="+recordID+"&key=my-key&book="+bookName+"&issue="+issued+"&due="+expected+"&enroll="+enroll;
+                send_message(url);
+
                 return true;
             }catch (Exception e){
                 Log.d("myDebug", "generateTransaction: "+e);
                 return false;
             }
         }
+    }
+
+    public void send_message(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(jsonObjectRequest);
     }
 
 }

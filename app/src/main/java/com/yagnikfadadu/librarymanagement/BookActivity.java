@@ -19,6 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -32,6 +39,7 @@ import com.yagnikfadadu.librarymanagement.ModalClass.BookModal;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -285,7 +293,10 @@ public class BookActivity extends AppCompatActivity {
                     Toast.makeText(this, "Book Unavailable", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                Document document = new Document("_id",""+System.currentTimeMillis())
+
+                String recordID = ""+System.currentTimeMillis();
+
+                Document document = new Document("_id",recordID)
                         .append("bookID",bookID)
                         .append("enroll",enroll)
                         .append("name",book.getString("name"))
@@ -306,12 +317,38 @@ public class BookActivity extends AppCompatActivity {
                 Bson update3 = Updates.set("credit",userCredits-1);
                 collection.updateOne(filter2,update3);
 
+                String email = user.getString("email");
+                String bookName = book.getString("name");
+
+                String url = "https://librarymanagement.yagnikpatel.repl.co/?email="+email+"&record="+recordID+"&key=my-key&book="+bookName+"&issue="+issued+"&due="+expected+"&enroll="+enroll;
+                send_message(url);
+
                 return true;
             }catch (Exception e){
                 Log.d("myDebug", "generateTransaction: "+e);
                 return false;
             }
         }
+    }
+
+    public void send_message(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(BookActivity.this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(jsonObjectRequest);
     }
 
 }

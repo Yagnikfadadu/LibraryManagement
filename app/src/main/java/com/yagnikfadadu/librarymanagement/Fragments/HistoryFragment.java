@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import com.yagnikfadadu.librarymanagement.R;
 
-public class NotificationsFragment extends Fragment {
-    public NotificationsFragment() {
+public class HistoryFragment extends Fragment {
+    public HistoryFragment() {
     }
 
     @Override
