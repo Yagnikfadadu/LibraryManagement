@@ -9,6 +9,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:testOnly="false"
         android:icon="@raw/lib_icon"
         android:label="@string/app_name"
         android:roundIcon="@raw/lib_icon"
@@ -16,6 +17,7 @@
         android:theme="@style/Theme.LibraryManagement"
         tools:targetApi="31">
         <activity
+            android:parentActivityName=".MainActivity"
             android:name=".ReturnBookActivity"
             android:exported="false" />
         <activity

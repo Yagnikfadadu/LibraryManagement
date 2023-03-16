@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.yagnikfadadu.librarymanagement.ModalClass.RecordModal;
 import com.yagnikfadadu.librarymanagement.R;
 import com.yagnikfadadu.librarymanagement.ReturnBookActivity;
@@ -102,12 +103,16 @@ public class MyBooksAdapter extends RecyclerView.Adapter<MyBooksAdapter.ViewHold
         public void onClick(View view) {
             int position = this.getAdapterPosition();
             Intent intent = new Intent(context, ReturnBookActivity.class);
-            intent.putExtra("name",recordModalModalList.get(position).getBookName());
-            intent.putExtra("author",recordModalModalList.get(position).getBookAuthor());
-            intent.putExtra("issueDate",recordModalModalList.get(position).getIssueDate());
-            intent.putExtra("url",recordModalModalList.get(position).getUrl());
-            intent.putExtra("id",recordModalModalList.get(position).getId());
-            context.startActivity(intent);
+            if (recordModalModalList.get(position).getReturnDate().isEmpty()) {
+                intent.putExtra("name", recordModalModalList.get(position).getBookName());
+                intent.putExtra("author", recordModalModalList.get(position).getBookAuthor());
+                intent.putExtra("issueDate", recordModalModalList.get(position).getIssueDate());
+                intent.putExtra("url", recordModalModalList.get(position).getUrl());
+                intent.putExtra("id", recordModalModalList.get(position).getId());
+                context.startActivity(intent);
+            }else {
+                Snackbar.make(title,"Book Already Returned",Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 }

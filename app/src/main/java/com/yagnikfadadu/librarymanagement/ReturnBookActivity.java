@@ -180,7 +180,7 @@ public class ReturnBookActivity extends AppCompatActivity {
 
                 Document document = usersCollection.find(Filters.eq("_id", enroll)).first();
 
-                String url = "https://LibraryManagementAPI.yagnikpatel.repl.co?email="+document.getString("email")+"&key=my-key&book="+bookName.getText()+"&id="+recordID+"&date="+issueDateString;
+                String url = "https://LibraryManagementAPI.yagnikpatel.repl.co?email="+document.getString("email")+"&key=my-key&book="+bookName.getText()+"&id="+recordID+"&date="+issueDateString+"&rating="+rat;
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
