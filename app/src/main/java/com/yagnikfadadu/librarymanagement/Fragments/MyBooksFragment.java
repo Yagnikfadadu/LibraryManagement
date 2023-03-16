@@ -2,10 +2,10 @@ package com.yagnikfadadu.librarymanagement.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +50,13 @@ public class MyBooksFragment extends Fragment {
     public MyBooksFragment() {
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_mybooks, container, false);
+
         recordModalArrayList = new ArrayList<>();
 
         myBooksAdapter = new MyBooksAdapter(getContext(), recordModalArrayList);
@@ -82,11 +84,11 @@ public class MyBooksFragment extends Fragment {
 
         MongoCursor<Document> cursor = recordCollection.find(Filters.eq("enroll", enroll)).iterator();
 
-        Log.d("myDebug", "" + recordCollection.count());
         while (cursor.hasNext()) {
             Document document = cursor.next();
             RecordModal recordModal = new RecordModal();
             recordModal.setBookName(document.getString("name"));
+            recordModal.setId(document.getString("_id"));
             recordModal.setUrl(document.getString("url"));
             recordModal.setBookAuthor(document.getString("author"));
             recordModal.setIssueDate(document.getString("issueDate"));

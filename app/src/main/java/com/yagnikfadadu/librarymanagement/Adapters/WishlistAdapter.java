@@ -42,7 +42,6 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WishlistModal wishlistModal= wishlistModalList.get(position);
         String name = wishlistModal.getWishListBookName();
-        Log.d("myDebug", "onBindViewHolder: "+name);
         holder.title.setText(name);
         if (name.length()<=36){
             String[] sub = name.split(" ");
@@ -51,7 +50,6 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                 edit+= sub[i]+" ";
             }
             edit += "\n"+sub[sub.length-1];
-            Log.d("books",edit);
             holder.title.setText(edit);
         }
         holder.author.setText(wishlistModal.getWishListAuthorName());
@@ -63,7 +61,6 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             e.printStackTrace();
         }
         holder.bookImage.setImageBitmap(bmp);
-        Log.d("bookid", "bookid: "+wishlistModal.getAvailable());
         if(wishlistModal.getAvailable()<=0)
         {
             holder.available.setText("This book is currently unavailable");

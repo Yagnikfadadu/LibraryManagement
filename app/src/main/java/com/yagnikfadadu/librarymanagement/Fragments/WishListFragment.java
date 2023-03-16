@@ -2,6 +2,7 @@ package com.yagnikfadadu.librarymanagement.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -46,10 +47,12 @@ public class WishListFragment extends Fragment {
     public WishListFragment() {
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wish_list, container, false);
+
         wishListArrayList = new ArrayList<>();
 
         wishlistAdapter = new WishlistAdapter(getContext(), wishListArrayList);

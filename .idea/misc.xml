@@ -15,16 +15,19 @@
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/ic_search.xml" value="0.1665" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/ic_user_2_svgrepo_com.xml" value="0.132" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/login_bottom_sheet.xml" value="0.206" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/name_circular.xml" value="0.142" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/otp_bg.xml" value="0.152" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/drawable/search_icon.xml" value="0.1665" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/activity_book.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/activity_email_verify.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/activity_forget_password.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/activity_return_book.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/book_list_item.xml" value="0.2" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/first_activity.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_mybooks.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_notifications.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_profile.xml" value="0.2111111111111111" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_records.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_search.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/LibraryManagement/app/src/main/res/layout/fragment_wish_list.xml" value="0.1984375" />

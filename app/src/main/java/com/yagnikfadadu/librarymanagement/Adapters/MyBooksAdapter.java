@@ -1,9 +1,10 @@
 package com.yagnikfadadu.librarymanagement.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.yagnikfadadu.librarymanagement.ModalClass.RecordModal;
 import com.yagnikfadadu.librarymanagement.R;
+import com.yagnikfadadu.librarymanagement.ReturnBookActivity;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +52,6 @@ public class MyBooksAdapter extends RecyclerView.Adapter<MyBooksAdapter.ViewHold
                 edit+= sub[i]+" ";
             }
             edit += "\n"+sub[sub.length-1];
-            Log.d("books",edit);
             holder.title.setText(edit);
         }
         holder.author.setText(recordModal.getBookAuthor());
@@ -65,9 +65,11 @@ public class MyBooksAdapter extends RecyclerView.Adapter<MyBooksAdapter.ViewHold
         holder.bookImage.setImageBitmap(bmp);
         holder.issueDate.setText("Issue date: "+recordModal.getIssueDate());
         if(recordModal.getReturnDate().isEmpty()){
+            holder.returnDate.setTextColor(Color.parseColor("#ffb800"));
             holder.returnDate.setText("Due Date: "+recordModal.getExpectedReturnDate());
         }
         else {
+            holder.returnDate.setTextColor(Color.parseColor("#00ce16"));
             holder.returnDate.setText("Returned On:"+recordModal.getReturnDate());
         }
 
@@ -98,7 +100,14 @@ public class MyBooksAdapter extends RecyclerView.Adapter<MyBooksAdapter.ViewHold
 
         @Override
         public void onClick(View view) {
-            Snackbar.make(view, "You have issued this book", Snackbar.LENGTH_SHORT).show();
+            int position = this.getAdapterPosition();
+            Intent intent = new Intent(context, ReturnBookActivity.class);
+            intent.putExtra("name",recordModalModalList.get(position).getBookName());
+            intent.putExtra("author",recordModalModalList.get(position).getBookAuthor());
+            intent.putExtra("issueDate",recordModalModalList.get(position).getIssueDate());
+            intent.putExtra("url",recordModalModalList.get(position).getUrl());
+            intent.putExtra("id",recordModalModalList.get(position).getId());
+            context.startActivity(intent);
         }
     }
 }

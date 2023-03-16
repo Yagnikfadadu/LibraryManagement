@@ -2,6 +2,7 @@ package com.yagnikfadadu.librarymanagement.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -76,13 +77,13 @@ public class SearchFragment extends Fragment {
     public SearchFragment(){
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        Log.d("books",""+ System.currentTimeMillis());
         bookModalArrayList = new ArrayList<>();
 
         bookSearchAdapter = new BookSearchAdapter(getContext(),bookModalArrayList);
@@ -108,7 +109,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    Log.d("myDebug",searchEditText.getText().toString());
                     if (!searchEditText.getText().toString().isEmpty()){
                         new Thread(){
                             @Override

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:clipChildren="false">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:weightSum="10"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/return_book_image"
+            android:elevation="5dp"
+            android:background="@color/white"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="25dp"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:layout_width="215dp"
+            android:layout_height="300dp"/>
+
+        <LinearLayout
+            android:layout_marginVertical="20dp"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/return_book_name"
+                android:layout_marginHorizontal="20dp"
+                android:maxLines="2"
+                android:gravity="center"
+                android:textSize="21sp"
+                android:text="Engineering Design | 6th Edition"
+                android:textStyle="bold"
+                android:fontFamily="@font/exo_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/book_return_author"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="Author : Gupta S. P."
+                android:fontFamily="@font/exo_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+
+            <TextView
+                android:id="@+id/return_publication"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:text="TATA MCGrawHill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/return_field"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:text="Field: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/issuedate_return"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:text="Issued on : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+
+            <TextView
+                android:id="@+id/give_rating"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:text="Give Rating of the Book  "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <SeekBar
+                android:layout_gravity="center"
+                android:id="@+id/rating_seekbar"
+                android:thumbTint="@color/primaryColor"
+                android:progressTint="@color/primaryColor"
+                android:max="5"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/return_image_ratings"
+                android:layout_marginHorizontal="5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/zero_star"
+                android:layout_width="150dp"
+                android:layout_height="30dp" />
+
+
+        </LinearLayout>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/return_button"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="5dp"
+            android:paddingHorizontal="55dp"
+            android:text="Return Book"
+            android:textAllCaps="false"
+            android:paddingVertical="10dp"
+            app:cornerRadius="15dp"
+            android:textSize="18sp"
+            app:strokeColor="@color/primaryColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</ScrollView>
