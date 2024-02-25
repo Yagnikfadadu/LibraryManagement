@@ -1,3 +1,4 @@
+# Library Management System
 ## Features of application:
 1) Students can effortlessly search for books using the mobile application. If a book is available, they can easily locate it in the library, accompanied by its availability status, rating, and a brief description.
 2) By scanning the QR code embedded on the book's first page, students can check if they have sufficient book credits to issue a new book. Book credits denote the maximum number of books a student can borrow within a given timeframe. Upon scanning, a digital receipt is generated, which can be presented to the librarian for book issuance.
