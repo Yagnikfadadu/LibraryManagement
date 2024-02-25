@@ -9,4 +9,6 @@
 7) When it's time to return a book, the librarian system sends an OTP to the student's registered email. This OTP is required to be entered into the librarian's system to complete the return process, consequently increasing the student's book credit quota.
 
 ## Further scope:
-By analyzing the transactional data of issued books, we can gain insights into the reading preferences of students, identifying popular book genres and peak reading periods. By applying machine learning algorithms, we can then personalize book recommendations for students based on their historical borrowing patterns, fostering a more engaging and tailored reading experience. Additionally, students can book their reading space in the library from the mobile application to avoid overcrowding during exam days, thereby optimizing their study environment.
+1) By analyzing the transactional data of issued books, we can gain insights into the reading preferences of students, identifying popular book genres and peak reading periods.
+2) By applying machine learning algorithms, we can then personalize book recommendations for students based on their historical borrowing patterns, fostering a more engaging and tailored reading experience.
+3) Students can book their reading space in the library from the mobile application to avoid overcrowding during exam days, thereby optimizing their study environment.
